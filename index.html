@@ -116,7 +116,7 @@ Balance: <span id="balance">Loading...</span>
 <div id="inventory" class="page">
 <div class="header">Inventory</div>
 <div style="padding:20px;">
-Your gifts will appear here
+<div id="inventoryList"></div>
 </div>
 </div>
 
@@ -154,7 +154,9 @@ function showPage(id){
 
   document.getElementById(id).classList.add("active");
 
-}
+  if(id === "inventory"){
+    loadInventory();
+  }
 
 
 
@@ -227,8 +229,40 @@ async function buyGift(id){
 
 login();
 
+async function loadInventory(){
+
+  const user = tg.initDataUnsafe.user;
+
+  const res = await fetch(API + "/inventory/" + user.id);
+
+  const gifts = await res.json();
+
+  const container = document.getElementById("inventoryList");
+
+  if(gifts.length === 0){
+
+    container.innerHTML = "No gifts yet";
+
+    return;
+  }
+
+  container.innerHTML = "";
+
+  gifts.forEach(gift => {
+
+    container.innerHTML += `
+      <div class="card">
+        🎁 ${gift.name}
+      </div>
+    `;
+
+  });
+
+}
+
 </script>
 
 
 </body>
 </html>
+
