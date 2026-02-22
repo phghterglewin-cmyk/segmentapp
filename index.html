@@ -242,7 +242,58 @@ tg.showAlert("Purchased: " + item);
 
 }
 
+const API = "https://segment-backend.onrender.com";
+
+async function login() {
+
+  const user = tg.initDataUnsafe.user;
+
+  const res = await fetch(API + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: user.id,
+      username: user.username
+    })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("balance").innerText =
+    data.balance + " TON";
+
+}
+
+login();
+
+async function buyGift(id) {
+
+  const user = tg.initDataUnsafe.user;
+
+  const res = await fetch(API + "/buy", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: user.id,
+      giftId: id
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.error){
+    tg.showAlert(data.error);
+    return;
+  }
+
+  document.getElementById("balance").innerText =
+    data.balance + " TON";
+
+  tg.showAlert("Purchased successfully!");
+}
+  
 </script>
 
 </body>
 </html>
+
