@@ -1,141 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segment</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<title>Segment</title>
-
 <style>
 
-:root{
---bg:#0f0f12;
---card:#1c1c21;
---cardHover:#25252b;
---accent:#0088ff;
---text:#ffffff;
---sub:#8e8e93;
-}
-
 body{
-margin:0;
-background:var(--bg);
-color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;
+  background:#0f0f0f;
+  color:white;
 }
 
 .header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px;
-animation:fade .4s ease;
+  padding:20px;
+  font-size:24px;
+  font-weight:600;
 }
 
 .balance{
-background:linear-gradient(135deg,#0088ff,#0057ff);
-padding:8px 14px;
-border-radius:20px;
-font-weight:600;
-}
-
-.profile{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.avatar{
-width:34px;
-height:34px;
-border-radius:50%;
-background:#333;
-}
-
-.username{
-font-size:14px;
-}
-
-.banner{
-margin:16px;
-padding:20px;
-background:linear-gradient(135deg,#0088ff,#7a5cff);
-border-radius:18px;
-font-size:20px;
-font-weight:700;
-animation:slide .5s ease;
-}
-
-.section{
-padding:16px;
+  background:#1c1c1c;
+  margin:15px;
+  padding:20px;
+  border-radius:16px;
+  font-size:20px;
 }
 
 .grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  padding:15px;
 }
 
 .card{
-background:var(--card);
-padding:16px;
-border-radius:16px;
-transition:.2s;
-cursor:pointer;
+  background:#1c1c1c;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 .card:hover{
-background:var(--cardHover);
-transform:translateY(-3px);
-}
-
-.icon{
-font-size:30px;
-}
-
-.title{
-margin-top:8px;
-}
-
-.price{
-color:var(--accent);
-font-size:14px;
+  transform:scale(1.05);
 }
 
 .nav{
-position:fixed;
-bottom:0;
-width:100%;
-background:#151518;
-display:flex;
-justify-content:space-around;
-padding:14px;
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#1c1c1c;
 }
 
-.navbtn{
-color:var(--sub);
+.nav button{
+  flex:1;
+  padding:15px;
+  background:none;
+  border:none;
+  color:white;
+  font-size:16px;
 }
 
-.navbtn.active{
-color:var(--accent);
+.page{
+  display:none;
+  padding-bottom:80px;
 }
 
-@keyframes fade{
-from{opacity:0}
-to{opacity:1}
-}
-
-@keyframes slide{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
+.page.active{
+  display:block;
 }
 
 </style>
@@ -143,118 +80,104 @@ transform:translateY(0);
 
 <body>
 
+<div id="home" class="page active">
+
 <div class="header">
-
-<div class="balance" id="balance">
-0 TON
+Segment 🎁
 </div>
 
-<div class="profile">
-
-<div class="username" id="username">
-Guest
+<div class="balance">
+Balance: <span id="balance">Loading...</span>
 </div>
-
-<div class="avatar" id="avatar"></div>
-
-</div>
-
-</div>
-
-<div class="banner">
-Segment Market 🎁
-</div>
-
-<div class="section">
 
 <div class="grid">
 
-<div class="card" onclick="buy('Star')">
-<div class="icon">⭐</div>
-<div class="title">Star Gift</div>
-<div class="price">0 TON</div>
+<div class="card" onclick="buyGift(1)">
+⭐ Star Gift<br>1 TON
 </div>
 
-<div class="card" onclick="buy('Diamond')">
-<div class="icon">💎</div>
-<div class="title">Diamond Gift</div>
-<div class="price">0 TON</div>
+<div class="card" onclick="buyGift(2)">
+💎 Diamond Gift<br>3 TON
 </div>
 
-<div class="card" onclick="buy('Crown')">
-<div class="icon">👑</div>
-<div class="title">Royal Crown</div>
-<div class="price">0 TON</div>
+<div class="card" onclick="buyGift(3)">
+👑 Crown<br>5 TON
 </div>
 
-<div class="card" onclick="buy('Rocket')">
-<div class="icon">🚀</div>
-<div class="title">Rocket Gift</div>
-<div class="price">0 TON</div>
+<div class="card" onclick="buyGift(4)">
+🚀 Rocket<br>2 TON
 </div>
 
 </div>
 
 </div>
+
+
+<div id="inventory" class="page">
+<div class="header">Inventory</div>
+<div style="padding:20px;">
+Your gifts will appear here
+</div>
+</div>
+
+
+<div id="profile" class="page">
+<div class="header">Profile</div>
+<div style="padding:20px;" id="username">
+Loading...
+</div>
+</div>
+
+
 
 <div class="nav">
-
-<div class="navbtn active">
-Store
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('inventory')">Inventory</button>
+<button onclick="showPage('profile')">Profile</button>
 </div>
 
-<div class="navbtn">
-Gifts
-</div>
 
-<div class="navbtn">
-Profile
-</div>
-
-</div>
 
 <script>
 
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-const user = tg.initDataUnsafe.user;
-
-if(user){
-
-document.getElementById("username").innerText =
-user.username || user.first_name;
-
-if(user.photo_url){
-
-document.getElementById("avatar").style.backgroundImage =
-"url(" + user.photo_url + ")";
-
-document.getElementById("avatar").style.backgroundSize = "cover";
-
-}
-
-}
-
-function buy(item){
-
-tg.showAlert("Purchased: " + item);
-
-}
-
 const API = "https://segment-backend.onrender.com";
 
-async function login() {
+
+function showPage(id){
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+}
+
+
+
+async function login(){
 
   const user = tg.initDataUnsafe.user;
 
-  const res = await fetch(API + "/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id: user.id,
-      username: user.username
+  document.getElementById("username").innerText =
+    "@" + user.username;
+
+  const res = await fetch(API + "/login",{
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+      id:user.id,
+      username:user.username
     })
+
   });
 
   const data = await res.json();
@@ -264,36 +187,48 @@ async function login() {
 
 }
 
-login();
 
-async function buyGift(id) {
+
+async function buyGift(id){
 
   const user = tg.initDataUnsafe.user;
 
-  const res = await fetch(API + "/buy", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userId: user.id,
-      giftId: id
+  const res = await fetch(API + "/buy",{
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+      userId:user.id,
+      giftId:id
     })
+
   });
 
   const data = await res.json();
 
   if(data.error){
+
     tg.showAlert(data.error);
     return;
+
   }
 
   document.getElementById("balance").innerText =
     data.balance + " TON";
 
-  tg.showAlert("Purchased successfully!");
+  tg.showAlert("Gift purchased!");
+
 }
-  
+
+
+login();
+
 </script>
+
 
 </body>
 </html>
-
